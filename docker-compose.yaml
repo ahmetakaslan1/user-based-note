@@ -3,16 +3,17 @@ version: '3.8'
 services:
   mysql:
     image: mysql:5.7.41
+    container_name: mysql_note
     restart: always
     ports:
-      - '3307:3306' # Burada 3307 portunu açtık Db bağlanmak için Ben Dbaver kullanıyorum.
+      - '3307:3306'
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - mysql_note:/data/db # Buradaki volume adı aşağıda tanımlanmalı
+      - mysql_note:/var/lib/mysql
 
 volumes:
-  mysql_note: # Volume burada tanımlanmalı
+  mysql_note:
