@@ -1,61 +1,118 @@
-# 📝 User-Based Notes API
+# 📝 User-Based Notes API (Not Uygulaması Backend)
 
-A professional, secure, and scalable REST API for note-taking, built with NestJS.
+NestJS ile geliştirilmiş, kullanıcı tabanlı, güvenli ve ölçeklenebilir bir Not Alma REST API projesi.
 
-## 🚀 Features
+Bu proje, mobil ve web uygulamaları için güçlü bir arka uç (backend) sağlar.
 
-### 🔐 Authentication & Security
+## 🚀 Özellikler
 
-- **JWT Authentication**: Secure login and registration.
-- **Global Guards**: All endpoints are protected by default.
-- **Public Decorator**: Specific endpoints (login/register) marked as public.
-- **Password Hashing**: Bcrypt integration for secure password storage.
-- **Swagger Auth**: Bearer Token support in Swagger UI.
+### 🔐 Güvenlik ve Kimlik Doğrulama
 
-### 🏗️ Architecture
+- **JWT (JSON Web Token)**: Güvenli giriş ve kayıt işlemleri.
+- **Şifreleme**: Kullanıcı şifreleri veritabanında "bcrypt" ile şifreli saklanır.
+- **Korumalı Endpointler**: Tüm sistem varsayılan olarak kilitlidir (`JwtAuthGuard`). Sadece geçerli token'a sahip kullanıcılar işlem yapabilir.
+- **Kullanıcıya Özel Veri**: Her kullanıcı sadece **kendi** notlarını, kategorilerini ve etiketlerini görebilir/düzenleyebilir.
 
-- **Modular Design**: Features separated into modules (Auth, Users, Notes, etc.).
-- **TypeORM**: Database ORM with MySQL.
-- **Docker**: Containerized database setup.
-- **DTO Validation**: Global validation pipes using class-validator.
+### 🏗️ Modüller
 
-## 🛠️ Tech Stack
+1.  **Auth Modülü**: Giriş, kayıt ve token işlemleri.
+2.  **Users Modülü**: Kullanıcı yönetimi.
+3.  **Notes Modülü**: Not oluşturma, okuma, güncelleme, silme (CRUD).
+4.  **Categories Modülü**: Kategorilendirme sistemi (Örn: İş, Kişisel).
+5.  **Tags Modülü**: Etiketleme sistemi (Örn: #acil, #fikir).
+
+### 🛠️ Teknolojiler
 
 - **Framework**: NestJS (TypeScript)
-- **Database**: MySQL 5.7 (Dockerized)
-- **ORM**: TypeORM
-- **Auth**: Passport, JWT, Bcrypt
-- **Documentation**: Swagger (OpenAPI)
+- **Veritabanı**: MySQL 5.7 (Docker üzerinde çalışır)
+- **ORM**: TypeORM (Veritabanı yönetimi için)
+- **Dokümantasyon**: Swagger (Otomatik API testi ve dokümanı)
 
-## 🏃‍♂️ Getting Started
+---
 
-1.  **Clone the repo**
+## 🏃‍♂️ Kurulum ve Çalıştırma
 
-    ```bash
-    git clone https://github.com/ahmetakaslan1/user-based-note.git
-    ```
+Projeyi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin.
 
-2.  **Install dependencies**
+### 1. Gereksinimler
 
-    ```bash
-    npm install
-    ```
+- Node.js (v16 veya üzeri)
+- Docker Desktop (Veritabanı için)
 
-3.  **Start Database (Docker)**
+### 2. İndirme ve Paketleri Yükleme
 
-    ```bash
-    docker-compose up -d
-    ```
+Projeyi klonlayın ve gerekli kütüphaneleri indirin:
 
-4.  **Run Application**
+```bash
+# Projeyi indirin
+git clone https://github.com/ahmetakaslan1/user-based-note.git
 
-    ```bash
-    npm run start:dev
-    ```
+# Klasöre girin
+cd user-based-note
 
-5.  **Explore API**
-    Go to: `http://localhost:3000/doc`
+# Paketleri yükleyin
+npm install
+```
 
-## 🤝 Git Workflow
+### 3. Veritabanını Başlatma
 
-See [GIT_WORKFLOW.md](./GIT_WORKFLOW.md) for details on our development process.
+Veritabanını Docker ile tek komutta ayağa kaldırın:
+
+```bash
+docker-compose up -d
+```
+
+> _Not: Bu komut arka planda bir MySQL sunucusu çalıştırır._
+
+### 4. Uygulamayı Başlatma
+
+Geliştirme modunda (değişiklikleri anlık görerek) başlatmak için:
+
+```bash
+npm run start:dev
+```
+
+Terminalde **"Nest application successfully started"** yazısını gördüyseniz işlem tamamdır! 🎉
+
+---
+
+## 📖 Kullanım Kılavuzu (API Dokümantasyonu)
+
+Uygulama çalışırken tarayıcınızdan şu adrese gidin:
+
+👉 **[http://localhost:3000/doc](http://localhost:3000/doc)**
+
+Burada **Swagger** arayüzünü göreceksiniz. Bu arayüz üzerinden:
+
+1.  `/auth/register` ile yeni bir kullanıcı oluşturun.
+2.  `/auth/login` ile giriş yapın ve **AccessToken** (Token) alın.
+3.  Sayfanın üstündeki **Authorize** butonuna tıklayın ve token'ı yapıştırın: `Bearer <token_yapıştırın>`
+4.  Artık kilitli olan `/notes`, `/categories`, `/tags` gibi tüm servisleri test edebilirsiniz.
+
+---
+
+## 📂 Proje Yapısı
+
+```bash
+src/
+├── app.module.ts          # Ana modül dosyası
+├── main.ts                # Uygulamanın giriş noktası (Port, CORS, Swagger ayarları)
+├── modules/               # Uygulama modülleri
+│   ├── auth/              # Giriş/Güvenlik işlemleri
+│   ├── categories/        # Kategori yönetimi
+│   ├── notes/             # Not yönetimi
+│   ├── tags/              # Etiket yönetimi
+│   └── users/             # Kullanıcı veritabanı işlemleri
+└── base/                  # Ortak kullanılan temel sınıflar (BaseEntity vb.)
+```
+
+## 🌍 Frontend ve Mobil Entegrasyonu
+
+Bu API, `http://localhost:3000/api` adresi üzerinden hizmet verir.
+
+- **CORS** açıktır, React/Next.js/Flutter uygulamaları sorunsuz bağlanabilir.
+- Tüm endpointler `/api` ile başlar (Örn: `/api/notes`).
+
+---
+
+👨‍💻 **Geliştirici**: Ahmet Akaslan

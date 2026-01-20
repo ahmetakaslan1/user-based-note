@@ -6,8 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -16,6 +18,7 @@ import { User } from '../users/entities/user.entity';
 
 @ApiTags('Notes')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('notes')
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
@@ -29,7 +32,7 @@ export class NotesController {
   @Get()
   @ApiOperation({ summary: 'Get all my notes' })
   findAll(@CurrentUser() user: User) {
-    return this.notesService.findAll(user); 
+    return this.notesService.findAll(user);
   }
 
   @Get(':id')

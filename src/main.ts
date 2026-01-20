@@ -18,7 +18,7 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, documentFactory);
 
-  // Enable validation globally
+  //  validasyonu global olarak aktif etmek için
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -26,6 +26,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+
+  app.enableCors();
+
+  // Global prefix bu api endpointlerine api eklenecek
+  app.setGlobalPrefix('api');
 
   await app.listen(process.env.PORT ?? 3000);
 }
