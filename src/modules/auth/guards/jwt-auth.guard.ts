@@ -18,11 +18,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     // 2. Eğer @Public varsa, kapıyı aç (true döndür)
     if (isPublic) {
-    
       return true;
     }
-    
-    console.log('jwt-auth.guard.ts');
+
     // 3. Eğer @Public YOKSA, normal token kontrolü yap (super.canActivate)
     return super.canActivate(context);
   }

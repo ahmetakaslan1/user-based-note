@@ -19,7 +19,7 @@ export class Note extends MyBaseEntity {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  category: Category;
+  category: Category | null;
 
   @ManyToMany(() => Tag, (tag) => tag.notes)
   @JoinTable({ name: 'note_tags' })
